@@ -69,6 +69,7 @@ class _CalendarState extends State<AnimatedHorizontalCalendar> {
   int currentIndex = 0;
   final scrollDirection = Axis.horizontal;
   AutoScrollController? controller;
+
   calenderAnimation(int index) {
     controller!.scrollToIndex(index, preferPosition: AutoScrollPosition.begin);
   }
@@ -84,8 +85,14 @@ class _CalendarState extends State<AnimatedHorizontalCalendar> {
     selectedCalenderDate =
         DateTime(currentDate.year, currentDate.month, currentDate.day);
     currentIndex = currentDate.day;
-    controller!.scrollToIndex(currentIndex - 1,
-        preferPosition: AutoScrollPosition.begin);
+
+    if (widget.isInWeek == true) {
+      controller!.scrollToIndex(currentIndex,
+          preferPosition: AutoScrollPosition.begin);
+    } else {
+      controller!.scrollToIndex(currentIndex - 1,
+          preferPosition: AutoScrollPosition.begin);
+    }
   }
 
   DateTime findFirstDateOfTheWeek(DateTime dateTime) {
@@ -130,7 +137,7 @@ class _CalendarState extends State<AnimatedHorizontalCalendar> {
                     }
                     if (widget.isSelected == true) {
                       indexs = -1;
-                      calenderAnimation(0);
+                      calenderAnimation(1);
                     }
                     return Container(
                       child: AutoScrollTag(

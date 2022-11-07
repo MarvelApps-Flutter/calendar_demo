@@ -24,15 +24,20 @@ class _HomeScreenState extends State<HomeScreen>
   DateTime? selectedDay;
   TextEditingController? weekController;
   TextEditingController? monthController;
-  List<TasksDataModel>? tasksDatas;
+  List<TasksDataModel>? tasksWeekDatas;
+  List<TasksDataModel>? tasksMonthDatas;
 
   initialSetUp() {
     weekController = TextEditingController();
     monthController = TextEditingController();
-    tasksDatas = [];
+    tasksWeekDatas = [];
+    tasksMonthDatas = [];
     isSelected = [true, false];
     selectedDay = DateTime.now();
-    tasksDatas = tasksData
+    tasksWeekDatas = tasksData
+        .where((element) => element.date == selectedDay!.day.toString())
+        .toList();
+    tasksMonthDatas = tasksData
         .where((element) => element.date == selectedDay!.day.toString())
         .toList();
     weekController!.text = selectedDay!.day.toString();
@@ -134,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen>
                       currentTabSelectedIndex = index;
                       weekController!.text = selectedDay!.day.toString();
                       monthController!.text = selectedDay!.day.toString();
-                      tasksDatas = tasksData
+                      tasksWeekDatas = tasksData
                           .where((element) =>
                               element.date == selectedDay!.day.toString())
                           .toList();
@@ -177,7 +182,6 @@ class _HomeScreenState extends State<HomeScreen>
                     TabWidget(
                         label: AppConstants.monthString, rightDivider: false),
                   ],
-                  
                 ),
               ),
             ),
@@ -215,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen>
                   onDateSelected: (date) async {
                     setState(() {
                       weekController!.text = date;
-                      tasksDatas = tasksData
+                      tasksWeekDatas = tasksData
                           .where((element) => element.date == date)
                           .toList();
                     });
@@ -286,14 +290,14 @@ class _HomeScreenState extends State<HomeScreen>
                             child: Row(
                               children: [
                                 Text(
-                                  "${tasksDatas!.length.toString()} ",
+                                  "${tasksWeekDatas!.length.toString()} ",
                                   style: const TextStyle(
                                       fontFamily: AppConstants.interString,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 18,
                                       color: Colors.white),
                                 ),
-                                tasksDatas!.length > 1
+                                tasksWeekDatas!.length > 1
                                     ? const Text(
                                         AppConstants.tasksString,
                                         style: TextStyle(
@@ -317,9 +321,10 @@ class _HomeScreenState extends State<HomeScreen>
                           )),
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: tasksDatas!.length,
+                          itemCount: tasksWeekDatas!.length,
                           itemBuilder: (context, index) {
-                            TasksDataModel tasksDataModel = tasksDatas![index];
+                            TasksDataModel tasksDataModel =
+                                tasksWeekDatas![index];
                             return Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
@@ -425,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen>
                   onDateSelected: (date) async {
                     setState(() {
                       monthController!.text = date;
-                      tasksDatas = tasksData
+                      tasksMonthDatas = tasksData
                           .where((element) => element.date == date)
                           .toList();
                     });
@@ -494,14 +499,14 @@ class _HomeScreenState extends State<HomeScreen>
                             child: Row(
                               children: [
                                 Text(
-                                  "${tasksDatas!.length.toString()} ",
+                                  "${tasksMonthDatas!.length.toString()} ",
                                   style: const TextStyle(
                                       fontFamily: AppConstants.interString,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 18,
                                       color: Colors.white),
                                 ),
-                                tasksDatas!.length > 1
+                                tasksMonthDatas!.length > 1
                                     ? const Text(
                                         AppConstants.tasksString,
                                         style: TextStyle(
@@ -525,9 +530,10 @@ class _HomeScreenState extends State<HomeScreen>
                           )),
                       ListView.builder(
                           shrinkWrap: true,
-                          itemCount: tasksDatas!.length,
+                          itemCount: tasksMonthDatas!.length,
                           itemBuilder: (context, index) {
-                            TasksDataModel tasksDataModel = tasksDatas![index];
+                            TasksDataModel tasksDataModel =
+                                tasksMonthDatas![index];
                             return Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
